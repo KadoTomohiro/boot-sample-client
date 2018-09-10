@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config src/proxy.config.js",
     "build": "ng build",
+    "build:prod": "ng build --prod",
     "test": "ng test",
+    "test:ci": "ng test --browsers ChromeHeadlessCI --watch false --progress false",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },

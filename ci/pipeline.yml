@@ -1,0 +1,80 @@
+---
+resources:
+- name: ng
+  type: git
+  source:
+    uri: https://github.com/KadoTomohiro/boot-sample-client
+
+jobs:
+- name: unit-test
+  public: true
+  plan:
+  - get: ng
+    trigger: true
+  - task: unit
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: yurihyuga/ng-ubuntu
+      inputs:
+      - name: ng
+      caches:
+        - path: ng/node_modules
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          cd ng
+          npm install
+          npm run test:ci
+- name: lint
+  public: true
+  plan:
+  - get: ng
+    trigger: true
+  - task: lint
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: yurihyuga/ng-ubuntu
+      inputs:
+      - name: ng
+      caches:
+      - path: ng/node_modules
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          cd ng
+          npm install
+          npm run lint
+- name: build
+  public: true
+  plan:
+  - get: ng
+    trigger: true
+  - task: lint
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: yurihyuga/ng-ubuntu
+      inputs:
+      - name: ng
+      caches:
+      - path: ng/node_modules
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          cd ng
+          npm install
+          npm run build
