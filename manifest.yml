@@ -1,5 +1,5 @@
 applications:
-- name: boot-sample-user08-client
+- name: boot-sample-kado-client
   memory: 32m
   instances: 1
   path: dist/boot-sample-client/

@@ -54,7 +54,7 @@ jobs:
           cd ng
           npm install
           npm run lint
-- name: build
+- name: build:debug
   public: true
   plan:
   - get: ng
@@ -78,3 +78,31 @@ jobs:
           cd ng
           npm install
           npm run build
+- name: build
+  public: true
+  plan:
+  - get: ng
+    trigger: true
+    passed:
+      - lint
+      - unit-test
+      - build:debug
+  - task: lint
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: yurihyuga/ng-ubuntu
+      inputs:
+      - name: ng
+      caches:
+      - path: ng/node_modules
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          cd ng
+          npm install
+          npm run build:prod
